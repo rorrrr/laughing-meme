@@ -32,23 +32,34 @@ var requestComplete = function() {
 
 var populateList = function(countries) {
 
+  var selectCountry;
+  var selectedCountry = document.getElementById('selectCountry');
+  
+  if (localStorage.getItem("currentCountry") !== null) {
+    var countryObject = localStorage.getItem("currentCountry");
+    selectedCountry = JSON.parse(countryObject);
+    
+    
+  }
 
-  // if (localStorage =! null) {
-  //   var element = localStorage.getItem("currentCountry");
+  var select = document.getElementById('selectCountry');
 
-    // var select = currentCountry.options[countrySelected.selectedIndex].innerText
-  // }
-  // else {
-    var select = document.getElementById('selectCountry');
-  // }
-
-
-  countries.forEach(function(country) {
+  for (country of countries) {
     var eachOption = document.createElement('option')
     eachOption.innerText = country.name;
-
+    if (country.name === selectedCountry.name){
+      eachOption.selected = "selected"
+    }
     select.appendChild(eachOption)
-  })
+  }
+
+
+  // countries.forEach(function(country) {
+  //   var eachOption = document.createElement('option')
+  //   eachOption.innerText = country.name;
+
+  //   select.appendChild(eachOption)
+  // })
 }
 
 var onSelectClick = function(){
@@ -60,7 +71,7 @@ var onShowInfoClick = function(){
 
   var url = "https://restcountries.eu/rest/v1";
   var countrySelected = document.getElementById('selectCountry')
-  var countryName = countrySelected.options[countrySelected.selectedIndex].innerText
+  var countryName = countrySelected.options[countrySelected.selectedIndex].innerText //look up dropdown, list all option, find the indexes, display inner text of one selected.
 
 
   var div = document.getElementById('info')
@@ -71,8 +82,12 @@ var onShowInfoClick = function(){
   {
   for (country of countries)
     {
-    if (country.name === countryName)
+    if (country.name === countryName){
+      var stringifiedCountry = JSON.stringify(country)
+      localStorage.setItem("currentCountry", stringifiedCountry);
       return "Name: " + country.name + "<br />Capital: " + country.capital + "<br />Population: " + country.population;
+      }
+      
     }
   }
 
@@ -83,7 +98,7 @@ var onShowInfoClick = function(){
   div.appendChild(paragraph);
   //console.log(countries[0].name)
 
-  localStorage.setItem("currentCountry", countrySelected);
+  
 
 
 // makeRequest(url, );
